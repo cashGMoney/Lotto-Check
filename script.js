@@ -32,6 +32,18 @@ const tickets = [
   [3, 17, 26, 40, 68, 25]
 ];
 
+function getPrize(regularMatches, powerMatch) {
+  if (regularMatches === 5 && powerMatch) return "Grand Prize";
+  if (regularMatches === 5) return "$1,000,000";
+  if (regularMatches === 4 && powerMatch) return "$50,000";
+  if (regularMatches === 4) return "$100";
+  if (regularMatches === 3 && powerMatch) return "$100";
+  if (regularMatches === 3) return "$7";
+  if (regularMatches === 2 && powerMatch) return "$7";
+  if (regularMatches === 1 && powerMatch) return "$4";
+  if (regularMatches === 0 && powerMatch) return "$4";
+  return "$0";
+}
 
 function getWinningNumbers() {
   const nums = [];
@@ -60,13 +72,22 @@ function checkTickets() {
   }
 
   let winCount = 0;
+  let totalWon = 0;
 
   const scoredTickets = tickets.map((ticket, index) => {
     const regularMatches = ticket.slice(0, 5).filter(n => winning.includes(n)).length;
     const powerMatch = ticket[5] === powerball;
     const isWinner = powerMatch || regularMatches >= 3;
-    if (isWinner) winCount++;
-    return { ticket, regularMatches, powerMatch, isWinner, index };
+    const prize = getPrize(regularMatches, powerMatch);
+
+    if (prize !== "$0") {
+      winCount++;
+      if (prize !== "Grand Prize") {
+        totalWon += parseInt(prize.replace(/[^0-9]/g, ""));
+      }
+    }
+
+    return { ticket, regularMatches, powerMatch, isWinner, prize, index };
   });
 
   scoredTickets.sort((a, b) => {
@@ -80,9 +101,10 @@ function checkTickets() {
 
   const summaryContainer = document.createElement("div");
   summaryContainer.className = "summary";
-  summaryContainer.innerHTML = winCount > 0
-    ? `🎉 You have <strong>${winCount}</strong> winning line${winCount > 1 ? "s" : ""}!`
-    : `😢 No winning lines this time. Try again!`;
+  summaryContainer.innerHTML = `
+    🎉 You have <strong>${winCount}</strong> winning line${winCount > 1 ? "s" : ""}!<br>
+    💰 Total Won: <strong>${totalWon > 0 ? `$${totalWon.toLocaleString()}` : "$0"}</strong>
+  `;
   resultsDiv.appendChild(summaryContainer);
 
   if (winCount > 0) launchConfetti();
@@ -90,22 +112,26 @@ function checkTickets() {
   const ticketContainer = document.createElement("div");
   ticketContainer.className = "ticket-container";
 
-  scoredTickets.forEach(({ ticket, regularMatches, powerMatch, isWinner, index }) => {
-  const div = document.createElement("div");
-  div.className = "ticket";
+  scoredTickets.forEach(({ ticket, regularMatches, powerMatch, isWinner, prize, index }) => {
+    const div = document.createElement("div");
+    div.className = "ticket";
 
-  const formatted = ticket.map((n, idx) => {
-    const isMatch = idx < 5 ? winning.includes(n) : n === powerball;
-    const ballClass = idx === 5 ? 'powerball' : '';
-    return `<span class="${isMatch ? 'match' : ''} ${ballClass}">${n}</span>`;
-  }).join(", ");
+    const formatted = ticket.map((n, idx) => {
+      const isMatch = idx < 5 ? winning.includes(n) : n === powerball;
+      const ballClass = idx === 5 ? 'powerball' : '';
+      return `<span class="${isMatch ? 'match' : ''} ${ballClass}">${n}</span>`;
+    }).join(", ");
 
-  div.innerHTML = `<strong>Line ${index + 1}:</strong> ${formatted} — ${regularMatches}/5 ${powerMatch ? "+ PB✓" : "+ PB✗"} ${isWinner ? "<span class='winner'>🎉 Winner!</span>" : ""}`;
-  ticketContainer.appendChild(div);
-});
-
+    div.innerHTML = `
+      <strong>Line ${index + 1}:</strong> ${formatted} — ${regularMatches}/5 ${powerMatch ? "+ PB✓" : "+ PB✗"}
+      ${isWinner ? `<span class='winner'>🎉 Winner!</span>` : ""}
+      <br><span class="prize">Prize: ${prize}</span>
+    `;
+    ticketContainer.appendChild(div);
+  });
 
   resultsDiv.appendChild(ticketContainer);
 }
+
 
 
