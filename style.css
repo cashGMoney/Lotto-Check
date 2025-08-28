@@ -97,3 +97,87 @@ h1, h2 {
 .ticket-container {
   margin-top: 10px;
 }
+
+.balls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ball-input {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  text-align: center;
+  font-size: 16px;
+  background-color: #e0e0e0;
+  flex: 1 1 20%;
+  max-width: 60px;
+}
+
+button {
+  display: block;
+  margin: 0 auto 20px auto;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 100%;
+  max-width: 300px;
+}
+
+.ticket {
+  font-size: 16px;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+.ticket span {
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .ball-input {
+    font-size: 14px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .ticket {
+    font-size: 14px;
+  }
+
+  .summary {
+    font-size: 18px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+input.powerball {
+  background-color: #ff4d4d;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #b30000;
+}
+
+input.powerball:focus {
+  outline: none;
+  box-shadow: 0 0 5px #ff4d4d;
+}
+
+input.powerball::placeholder {
+  color: white;
+  opacity: 0.8;
+}
