@@ -1,3 +1,4 @@
+<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,23 @@
 </head>
 <body>
   <h1>Lotto Ticket Checker</h1>
-  <input type="text" id="winningNumbers" placeholder="Enter winning numbers (e.g. 5,12,23,34,45,49)">
-  <button onclick="checkTickets()">Check Tickets</button>
+
+  <div id="winning-section">
+    <h2>Enter Winning Numbers</h2>
+    <div class="balls">
+      <input type="number" class="ball-input" id="num1" min="1" max="69">
+      <input type="number" class="ball-input" id="num2" min="1" max="69">
+      <input type="number" class="ball-input" id="num3" min="1" max="69">
+      <input type="number" class="ball-input" id="num4" min="1" max="69">
+      <input type="number" class="ball-input" id="num5" min="1" max="69">
+      <input type="number" class="ball-input powerball" id="powerball" min="1" max="26" placeholder="PB">
+    </div>
+    <button onclick="checkTickets()">Check Tickets</button>
+  </div>
+
   <div id="results"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
+
